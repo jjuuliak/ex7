@@ -74,14 +74,19 @@ def validate_solution(data, x, model):
         elif assigned > req:
             recomputed += (assigned - req) * over_w
 
-    solver_obj = pulp.value(model.objective)
+    if model is None:
+        solver_obj = None
+        print("\n--- OBJECTIVE CHECK ---")
+        print(" Heuristic schedule: no solver objective available.")
+    else:
+        solver_obj = pulp.value(model.objective)
 
-    print("\n--- OBJECTIVE CHECK ---")
-    print(" Solver objective:     ", solver_obj)
-    print(" Recomputed objective: ", recomputed)
+        print("\n--- OBJECTIVE CHECK ---")
+        print(" Solver objective:     ", solver_obj)
+        print(" Recomputed objective: ", recomputed)
 
-    if abs(solver_obj - recomputed) > 1e-5:
-        warnings.append("Objective mismatch detected!")
+        if abs(solver_obj - recomputed) > 1e-5:
+            warnings.append("Objective mismatch detected!")
 
     # Summary
     print("\n--- FEASIBILITY SUMMARY ---")

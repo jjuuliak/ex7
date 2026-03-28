@@ -1,6 +1,8 @@
 import pulp
 import re
 from validate_solution import validate_solution   # ✅ import validator
+from heuristic_solver import heuristic_solve
+from compute_objective_score import compute_objective_score  # ✅ import objective score calculator
 
 
 # ============================================================
@@ -269,6 +271,15 @@ def print_schedule(x, data):
 # ============================================================
 if __name__ == "__main__":
     data = parse_instance("Instance2.txt")
+
     model, x = solve(data)
     print_schedule(x, data)
     validate_solution(data, x, model)
+    print("Exact objective:", compute_objective_score(data, x))
+
+    print("\n=== HEURISTIC SOLUTION ===")
+    hx = heuristic_solve(data)
+
+    print_schedule(hx, data)
+    validate_solution(data, hx, None)
+    print("Heuristic objective:", compute_objective_score(data, hx))
